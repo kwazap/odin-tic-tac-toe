@@ -95,7 +95,11 @@ let gameBoard = (function () {
     }
 
     function winRound(winner) {
-        
+        if (winner == 'XXX') {
+            Player1.updateScore()
+        } else {
+            Player2.updateScore()
+        }
     }
     
 
