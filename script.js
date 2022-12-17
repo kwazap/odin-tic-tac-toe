@@ -50,6 +50,7 @@ let gameBoard = (function () {
         console.log(this);
         _setBoardState.call(gameBoard, this.id)
         _render()
+        checkWin()
     }
 
     function _render() {
@@ -67,6 +68,34 @@ let gameBoard = (function () {
             boardState[id] = (playerTurn ? 'X' : 'O')
         }
         playerTurn = !playerTurn
+    }
+
+    function checkWin() {
+        console.log('checking', boardState);
+        for (let i = 0; i < 3; i++) {
+            let check = boardState[i] + boardState[i + 3] + boardState[i + 6]
+            if (check == 'XXX' || check == 'OOO') {
+                winRound(check)
+            }
+        }
+        for (let i = 0; i < 7; i = i + 3) {
+            let check = boardState[i] + boardState[i + 1] + boardState[i + 2]
+            if (check == 'XXX' || check == 'OOO') {
+                winRound(check)
+            }
+        }
+        let diagonal1 = boardState[0] + boardState[4] + boardState[8]
+        let diagonal2 = boardState[2] + boardState[4] + boardState[6]
+        if (diagonal1 == 'XXX' || diagonal1 == 'OOO') {
+            winRound(diagonal1)
+        }
+        if (diagonal2 == 'XXX' || diagonal2 == 'OOO') {
+            winRound(diagonal2)
+        }
+    }
+
+    function winRound(winner) {
+        
     }
     
 
