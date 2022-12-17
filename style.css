@@ -34,7 +34,7 @@ html,body {
 }
 
 .state-2-wrapper {
-    display: grid;
+    display: none;
     grid-template-columns: 240px 360px 240px;
     justify-content: center;
     text-align: center;

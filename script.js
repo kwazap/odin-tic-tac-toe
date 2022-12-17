@@ -2,7 +2,7 @@
 
 let displayController = (function () {
    
-    this.state = 0;
+    let state = 1
 
     // cache DOM 
     domArray = [document.querySelector('.state-1-wrapper'),
@@ -11,7 +11,8 @@ let displayController = (function () {
     _render(state)
 
     function getState() {
-        return this.state
+        console.log(this);
+        return state
     }
 
     function setState(newState) {
@@ -26,6 +27,48 @@ let displayController = (function () {
         domArray[state].style.display = 'grid'
     }
 
-    return {getState, setState}
+    return { getState, setState }
+
+})()
+
+let gameBoard = (function () {
+
+    let boardState = Array(9)
+
+    // player turn flip-flop
+    let playerTurn = true
+
+    // DOM cache
+    let fields = document.querySelectorAll('.field')
+
+    //innit
+    fields.forEach(element => {
+        element.addEventListener('click', updateBoard)
+    })
+
+    function updateBoard() {
+        console.log(this);
+        _setBoardState.call(gameBoard, this.id)
+        _render()
+    }
+
+    function _render() {
+        for (let i = 0; i < 9; i++) {
+            fields[i].textContent = boardState[i];            
+        }
+    }
+
+    function getBoardState() {
+        return boardState
+    }
+
+    function _setBoardState(id) {
+        if (!boardState[id]) {
+            boardState[id] = (playerTurn ? 'X' : 'O')
+        }
+        playerTurn = !playerTurn
+    }
     
+
+    return { getBoardState }
 })()
