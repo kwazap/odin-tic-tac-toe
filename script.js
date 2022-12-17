@@ -101,3 +101,21 @@ let gameBoard = (function () {
 
     return { getBoardState }
 })()
+
+
+const Player = () => {
+    let score = 0
+
+    const updateScore = () => {
+        score++
+    }
+
+    const getScore = () => {
+        return score
+    }
+
+    return {updateScore, getScore}
+}
+
+const Player1 = Player();
+const Player2 = Player();
