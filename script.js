@@ -152,7 +152,9 @@ let gameBoard = (function () {
     function resetScore() {
         scoreboard.forEach(element => {
             element.textContent = 'Score: 0'
-        });
+        })
+        Player1.reset()
+        Player2.reset()
     }
     
 
@@ -171,7 +173,11 @@ const Player = () => {
         return score
     }
 
-    return { updateScore, getScore }
+    const reset = () => {
+        score = 0
+    }
+
+    return { updateScore, getScore, reset }
 }
 
 const Player1 = Player();
