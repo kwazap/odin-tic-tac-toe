@@ -35,6 +35,8 @@ let displayController = (function () {
 let gameBoard = (function () {
 
     let boardState = Array(9)
+
+    // 0 = playing, 1 = round win, 2 = match win
     let winState = 0
 
     // player turn flip-flop
@@ -83,31 +85,46 @@ let gameBoard = (function () {
         for (let i = 0; i < 3; i++) {
             let check = boardState[i] + boardState[i + 3] + boardState[i + 6]
             if (check == 'XXX' || check == 'OOO') {
-                winRound(check, [i, i+3, i+6])
+                winRound(check, [i, i + 3, i + 6])
+                return
             }
         }
         for (let i = 0; i < 7; i = i + 3) {
             let check = boardState[i] + boardState[i + 1] + boardState[i + 2]
             if (check == 'XXX' || check == 'OOO') {
-                winRound(check, [i, i+1, i+2])
+                winRound(check, [i, i + 1, i + 2])
+                return
             }
         }
         let diagonal1 = boardState[0] + boardState[4] + boardState[8]
         let diagonal2 = boardState[2] + boardState[4] + boardState[6]
         if (diagonal1 == 'XXX' || diagonal1 == 'OOO') {
             winRound(diagonal1, [0, 4, 8])
+            return
         }
         if (diagonal2 == 'XXX' || diagonal2 == 'OOO') {
             winRound(diagonal2, [2, 4, 6])
+            return
         }
+        for (let i = 0; i < boardState.length; i++) {
+            if (!boardState[i]) {
+                return
+            }           
+        }
+        winRound('TIE',[])
     }
 
     function winRound(winner, matchingFields) {
+        console.log(winner, matchingFields);
         matchingFields.forEach(element => {
             fields[element].style.backgroundColor = 'green'
         });
         winState = 1
-        winner == 'XXX' ? Player1.updateScore() : Player2.updateScore()
+        if (winner == 'XXX') {
+            Player1.updateScore()            
+        } else if (winner == 'OOO') {
+            Player2.updateScore()
+        }
         _render()
         resultBox.style.display = 'grid'
     }
