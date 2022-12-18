@@ -115,7 +115,6 @@ let gameBoard = (function () {
     }
 
     function winRound(winner, matchingFields) {
-        console.log(winner, matchingFields);
         matchingFields.forEach(element => {
             fields[element].style.backgroundColor = 'green'
         });
@@ -125,6 +124,13 @@ let gameBoard = (function () {
         } else if (winner == 'OOO') {
             Player2.updateScore()
         }
+
+        if (Player1.getScore() == 5 || Player1.getScore() == 5) {
+            const matchWinner = Player1.getScore() == 5 ? 'Player 1' : 'Player 2'
+            resultBox.textContent = `${matchWinner} wins the round. Rematch?`
+            winState = 2
+        }
+
         _render()
         resultBox.style.display = 'grid'
     }
@@ -136,7 +142,17 @@ let gameBoard = (function () {
         boardState = Array(9)
         _render()
         resultBox.style.display = 'none'
+        resultBox.textContent = 'Next Round'
+        if (winState == 2) {
+            resetScore()
+        }
         winState = 0
+    }
+
+    function resetScore() {
+        scoreboard.forEach(element => {
+            element.textContent = 'Score: 0'
+        });
     }
     
 
