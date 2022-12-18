@@ -34,6 +34,7 @@ let displayController = (function () {
 let gameBoard = (function () {
 
     let boardState = Array(9)
+    let winState = 0
 
     // player turn flip-flop
     let playerTurn = true
@@ -50,10 +51,12 @@ let gameBoard = (function () {
     })
 
     function updateBoard() {
-        console.log(this);
-        _setBoardState.call(gameBoard, this.id)
-        _render()
-        checkWin()
+        if (!winState) {
+            _setBoardState.call(gameBoard, this.id)
+            _render()
+            checkWin()
+        }
+        
     }
 
     function _render() {
@@ -102,6 +105,7 @@ let gameBoard = (function () {
         matchingFields.forEach(element => {
             fields[element].style.backgroundColor = 'green'
         });
+        winState = 1
         winner == 'XXX' ? Player1.updateScore() : Player2.updateScore()
         _render()
         resultBox.style.display = 'grid'
@@ -114,6 +118,7 @@ let gameBoard = (function () {
         boardState = Array(9)
         _render()
         resultBox.style.display = 'none'
+        winState = 0
     }
     
 
