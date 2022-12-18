@@ -5,19 +5,20 @@ let displayController = (function () {
     let state = 1
 
     // cache DOM 
-    domArray = [document.querySelector('.state-1-wrapper'),
+    const domArray = [document.querySelector('.state-1-wrapper'),
                 document.querySelector('.state-2-wrapper')]  
 
                                
     _render(state)
 
     function getState() {
+        console.log(this)
         return state
     }
 
     function setState(newState) {
-        this.state = newState
-        _render(this.state)
+        state = newState
+        _render(state)
     }
 
     function _render(state) {
