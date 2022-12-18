@@ -9,7 +9,7 @@ html,body {
 
 .wrapper {
     display: grid;
-    grid-template-rows: 1fr 5fr;
+    grid-template-rows: 128px 1fr 2fr;
     height: 100vh;
 }
 
@@ -72,4 +72,11 @@ html,body {
 
 .line4 {
     grid-area: 4 / 1 / 5 / 6;
+}
+
+.result-wrapper {
+    display: none;
+    justify-items: center;
+    font-size: 3rem;
+    font-weight: bold;
 }
