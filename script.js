@@ -53,9 +53,9 @@ let gameBoard = (function () {
         element.addEventListener('click', updateBoard)
     })
 
-    function updateBoard() {
+    function updateBoard(AIid) {
         if (!winState) {
-            _setBoardState.call(gameBoard, this.id)
+            _setBoardState.call(gameBoard, this.id || AIid)
             _render()
             checkWin()
         }
@@ -156,9 +156,32 @@ let gameBoard = (function () {
         Player1.reset()
         Player2.reset()
     }
+
+    const easyAI = (function () {
+
+        function evaluate() {
+            let emptyFields = []
+            let boardState = gameBoard.getBoardState()
+            for (let i = 0; i < boardState.length; i++) {
+                if (!boardState[i]) {
+                    emptyFields.push(i)
+                }
+            }
+            return emptyFields
+        }
+
+        function makeMove() {
+            const emptyFields = evaluate()
+            const randomSpot = emptyFields[Math.floor(Math.random() * emptyFields.length)]
+            updateBoard(randomSpot)
+        }
+
+        return { makeMove, evaluate }
+
+    })()
     
 
-    return { getBoardState }
+    return { getBoardState, easyAI }
 })()
 
 
