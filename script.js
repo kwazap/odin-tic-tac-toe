@@ -53,11 +53,26 @@ let gameBoard = (function () {
         element.addEventListener('click', updateBoard)
     })
 
+    function playAI() {
+        setTimeout(() => {
+            if (players[Number(playerTurn)].getAI() == 1) {
+                easyAI.makeMove()
+            } else {
+                // impossibleAI.makeMove()
+            }
+        }, 1000);
+    }
+
     function updateBoard(AIid) {
         if (!winState) {
             _setBoardState.call(gameBoard, this.id || AIid)
             _render()
             checkWin()
+            console.log(players[Number(playerTurn)], playerTurn);
+            if (players[Number(playerTurn)].getAI() > 0) {
+                console.log('trigg');
+                playAI()
+            }
         }
         
     }
@@ -125,7 +140,7 @@ let gameBoard = (function () {
             Player2.updateScore()
         }
 
-        if (Player1.getScore() == 5 || Player1.getScore() == 5) {
+        if (Player1.getScore() == 5 || Player2.getScore() == 5) {
             const matchWinner = Player1.getScore() == 5 ? 'Player 1' : 'Player 2'
             resultBox.textContent = `${matchWinner} wins the round. Rematch?`
             winState = 2
@@ -147,6 +162,7 @@ let gameBoard = (function () {
             resetScore()
         }
         winState = 0
+        playAI()
     }
 
     function resetScore() {
@@ -181,12 +197,15 @@ let gameBoard = (function () {
     })()
     
 
-    return { getBoardState, easyAI }
+    return { getBoardState, easyAI, playAI }
 })()
 
 
 const Player = () => {
     let score = 0
+
+    // 0 = human, 1 = easy, 2 = impossible
+    let isAI = 0
 
     const updateScore = () => {
         score++
@@ -196,12 +215,21 @@ const Player = () => {
         return score
     }
 
+    const getAI = () => {
+        return isAI
+    }
+
+    const setAI = (newSetting) => {
+        isAI = newSetting
+    }
+
     const reset = () => {
         score = 0
     }
 
-    return { updateScore, getScore, reset }
+    return { updateScore, getScore, getAI, setAI, reset}
 }
 
 const Player1 = Player();
 const Player2 = Player();
+const players = [Player2, Player1]
