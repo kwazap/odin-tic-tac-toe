@@ -80,3 +80,9 @@ html,body {
     font-size: 3rem;
     font-weight: bold;
 }
+
+button {
+    margin: 64px;
+    width: 240px;
+    height: 64px;
+}
