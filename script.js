@@ -6,8 +6,7 @@ let displayController = (function () {
 
     // cache DOM 
     const domArray = [document.querySelector('.state-1-wrapper'),
-                document.querySelector('.state-2-wrapper')]  
-
+        document.querySelector('.state-2-wrapper')] 
                                
     _render(state)
 
@@ -43,6 +42,7 @@ let gameBoard = (function () {
     let playerTurn = true
 
     // DOM cache
+    const startMenu = document.querySelectorAll('.opponents-wrapper > div')
     let fields = document.querySelectorAll('.field')
     const scoreboard = document.querySelectorAll('.scoreboard')
     const resultBox = document.querySelector('.result-wrapper')
@@ -52,6 +52,35 @@ let gameBoard = (function () {
     fields.forEach(element => {
         element.addEventListener('click', updateBoard)
     })
+    startMenu.forEach(element => {
+        element.addEventListener('click', setPlayerAI)
+    })
+    document.querySelector('button').addEventListener('click', startGame)
+
+    function setPlayerAI() {
+        if (this.classList[1] == 'X') {
+            Player1.setAI(Number(this.getAttribute('ai')))
+            document.querySelectorAll('.X').forEach(element => {
+                element.style.borderStyle = 'none'
+            })
+            this.style.borderStyle = 'solid'
+        } else {
+            Player2.setAI(Number(this.getAttribute('ai')))
+            document.querySelectorAll('.O').forEach(element => {
+                element.style.borderStyle = 'none'
+            })
+            this.style.borderStyle = 'solid'
+        }
+        console.log(Player1.getAI())
+    }
+
+    function startGame() {
+        displayController.setState(1)
+        console.log(Player1.getAI());
+        if (Player1.getAI() !== 0) {
+            playAI()
+        }
+    }
 
     function playAI() {
         setTimeout(() => {

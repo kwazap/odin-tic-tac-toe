@@ -27,7 +27,7 @@ html,body {
     text-align: center;
 }
 
-.opponents-wrapper {
+.opponents-wrapper{
     display: grid;
     grid-template-columns: 240px 240px 240px;
     justify-content: center;    
