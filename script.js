@@ -56,9 +56,9 @@ let gameBoard = (function () {
     function playAI() {
         setTimeout(() => {
             if (players[Number(playerTurn)].getAI() == 1) {
-                easyAI.makeMove()
+                tttAI.easyMove()
             } else {
-                // impossibleAI.makeMove()
+                tttAI.impossibleMove()
             }
         }, 1000);
     }
@@ -70,7 +70,6 @@ let gameBoard = (function () {
             checkWin()
             console.log(players[Number(playerTurn)], playerTurn);
             if (players[Number(playerTurn)].getAI() > 0) {
-                console.log('trigg');
                 playAI()
             }
         }
@@ -173,7 +172,7 @@ let gameBoard = (function () {
         Player2.reset()
     }
 
-    const easyAI = (function () {
+    const tttAI = (function () {
 
         function evaluate() {
             let emptyFields = []
@@ -186,18 +185,121 @@ let gameBoard = (function () {
             return emptyFields
         }
 
-        function makeMove() {
+        function easyMove() {
             const emptyFields = evaluate()
             const randomSpot = emptyFields[Math.floor(Math.random() * emptyFields.length)]
             updateBoard(randomSpot)
         }
 
-        return { makeMove, evaluate }
+        function impossibleMove() {
+            let bestScore = playerTurn ? -Infinity : Infinity
+            let move
+            for (let i = 0; i < boardState.length; i++) {
+                if (boardState[i] == undefined) {
+                    boardState[i] = playerTurn ? 'X' : 'O'
+                    let score = minimax(boardState, 0, !playerTurn)
+                    boardState[i] = undefined
+                    console.log('score', score, bestScore)
+                    if (playerTurn) {
+                        if (score > bestScore) {
+                            bestScore = score
+                            move = i
+                        }
+                    } else {
+                        if (score < bestScore) {
+                            bestScore = score
+                            move = i
+                        }
+                    }
+                    console.log('move', move)
+                }
+                
+            }
+            console.log('move', move);
+            updateBoard(move)
+        }
+
+        function checkOutcome() {
+            for (let i = 0; i < 3; i++) {
+                let check = boardState[i] + boardState[i + 3] + boardState[i + 6]
+                if (check == 'XXX' || check == 'OOO') {
+                    return checkResult(check)
+                }
+            }
+            for (let i = 0; i < 7; i = i + 3) {
+                let check = boardState[i] + boardState[i + 1] + boardState[i + 2]
+                if (check == 'XXX' || check == 'OOO') {
+                    return checkResult(check)
+                }
+            }
+            let diagonal1 = boardState[0] + boardState[4] + boardState[8]
+            let diagonal2 = boardState[2] + boardState[4] + boardState[6]
+            if (diagonal1 == 'XXX' || diagonal1 == 'OOO') {
+                return checkResult(diagonal1)
+            }
+            if (diagonal2 == 'XXX' || diagonal2 == 'OOO') {
+                return checkResult(diagonal2)
+            }
+
+            for (let i = 0; i < boardState.length; i++) {
+                if (boardState[i] == undefined) {
+                    return
+                }
+                
+            }
+
+            return 0
+
+            function checkResult(check) {
+                if (check == 'XXX') {
+                    return 1
+                } else if (check == 'OOO') {
+                    return -1
+                }
+            }
+        }
+
+        function minimax(boardState, depth, isMaximizing) {
+            let result = checkOutcome()
+            if (result !== undefined) {
+                return result
+            }
+
+            if (isMaximizing) {
+                let bestScore = -Infinity
+                for (let i = 0; i < boardState.length; i++) {
+                    if (boardState[i] == undefined) {
+                        boardState[i] = 'X'
+                        let score = minimax(boardState, depth + 1, false)
+                        boardState[i] = undefined
+                        if (score > bestScore) {
+                            bestScore = score
+                        }
+                    }
+                }
+                return bestScore
+            } else {
+                let bestScore = Infinity
+                for (let i = 0; i < boardState.length; i++) {
+                    if (boardState[i] == undefined) {
+                        boardState[i] = 'O'
+                        let score = minimax(boardState, depth + 1, true)
+                        boardState[i] = undefined
+                        if (score < bestScore) {
+                            bestScore = score
+                        }
+                    }
+                }
+                return bestScore
+            }
+        }
+
+        return { easyMove, impossibleMove, checkOutcome }
 
     })()
-    
 
-    return { getBoardState, easyAI, playAI }
+    return { getBoardState, playAI, tttAI }
+
 })()
 
 
