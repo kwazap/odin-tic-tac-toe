@@ -2,7 +2,7 @@
 
 let displayController = (function () {
    
-    let state = 1
+    let state = 0
 
     // cache DOM 
     const domArray = [document.querySelector('.state-1-wrapper'),
