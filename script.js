@@ -65,6 +65,7 @@ let gameBoard = (function () {
 
     function updateBoard(AIid) {
         if (!winState) {
+            console.log('PLAYER TURN', playerTurn)
             _setBoardState.call(gameBoard, this.id || AIid)
             _render()
             checkWin()
@@ -161,7 +162,9 @@ let gameBoard = (function () {
             resetScore()
         }
         winState = 0
-        playAI()
+        if (players[Number(playerTurn)].getAI() !== 0) {
+            playAI()
+        }
     }
 
     function resetScore() {
@@ -199,7 +202,6 @@ let gameBoard = (function () {
                     boardState[i] = playerTurn ? 'X' : 'O'
                     let score = minimax(boardState, 0, !playerTurn)
                     boardState[i] = undefined
-                    console.log('score', score, bestScore)
                     if (playerTurn) {
                         if (score > bestScore) {
                             bestScore = score
@@ -211,12 +213,12 @@ let gameBoard = (function () {
                             move = i
                         }
                     }
-                    console.log('move', move)
                 }
                 
             }
-            console.log('move', move);
-            updateBoard(move)
+            if (move !== undefined) {
+                updateBoard(move)
+            }
         }
 
         function checkOutcome() {
